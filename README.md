@@ -1,4 +1,4 @@
-# StudyGroupDyce
+#Dyce
 Building the UDice System in Python for the Python Study Group
 
 ## What is the UDice System?
