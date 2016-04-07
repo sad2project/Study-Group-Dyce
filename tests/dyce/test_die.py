@@ -1,5 +1,5 @@
 from unittest import TestCase
-from dyce.die import Die
+from dyce.die import *
 
 
 class Die_Test (TestCase):
@@ -7,39 +7,34 @@ class Die_Test (TestCase):
         self.someName = "Test"
         self.someFaces = [0, 0]
 
-    def test_can_create_with_name_and_faces(self):
-        die = Die(self.someName, self.someFaces)
-
-        self.assertIsNotNone(die)
-
     def test_name_cannot_be_empty(self):
         with self.assertRaises(TypeError):
-            die = Die("", self.someFaces)
+            Die("", self.someFaces)
 
     def test_name_cannot_be_whitespace(self):
         with self.assertRaises(TypeError):
-            die = Die(" \t", self.someFaces)
+            Die(" \t", self.someFaces)
 
     def test_name_cannot_be_None(self):
         with self.assertRaises(TypeError):
-            die = Die(None, self.someFaces)
+            Die(None, self.someFaces)
 
     def test_faces_cannot_be_None(self):
         with self.assertRaises(TypeError):
-            die = Die(self.someName, None)
+            Die(self.someName, None)
 
     def test_faces_cannot_be_empty(self):
         with self.assertRaises(TypeError):
-            die = Die(self.someName, [])
+            Die(self.someName, [])
 
     def test_faces_cannot_have_one_face(self):
         with self.assertRaises(TypeError):
-            die = Die(self.someName, [1])
+            Die(self.someName, [1])
 
     def test_faces_cannot_contain_None(self):
         with self.assertRaises(TypeError):
             self.someFaces.append(None)
-            die = Die(self.someName, self.someFaces)
+            Die(self.someName, self.someFaces)
 
     def test_roll_is_not_None(self):
         die = Die(self.someName, self.someFaces)
@@ -55,3 +50,33 @@ class Die_Test (TestCase):
 
         self.assertEqual(result.die, die)
 
+    def test_roll_returns_a_Roll_with_Face_from_die(self):
+        die = Die(self.someName, self.someFaces)
+
+        result = die.roll()
+
+        self.assertIn(result.face, self.someFaces)
+
+
+class Face_Test(TestCase):
+
+    def test_can_FaceValues_cannot_be_None(self):
+        with self.assertRaises(TypeError):
+            Face(None)
+
+    def test_no_FaceValues_are_None(self):
+        with self.assertRaises(TypeError):
+            Face([None])
+
+    def test_no_FaceValues_have_the_same_Unit(self):
+        fv1 = FaceValue("unit1")
+        fv2 = FaceValue("unit1")
+
+        with self.assertRaises(TypeError):
+            Face([fv1, fv2])
+
+    def test_can_have_empty_face_values(self):
+        Face([])
+
+
+    def test_can_
