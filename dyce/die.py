@@ -16,13 +16,15 @@ class Die:
         self.faces = faces
 
     def roll(self):
-        return Roll(self, random.choice(self.faces))
+        return Roll(self)
 
 
 class Roll:
-    def __init__(self, die, face):
+    def __init__(self, die):
         self.die = die
-        self.face = face
+        self.face = random.choice(die.faces)
+
+
 
 
 class Face:
@@ -44,5 +46,10 @@ def _hasDuplicateUnits(faceValues):
 
 
 class FaceValue:
-    def __init__(self, unit):
+    def __init__(self, value, unit):
+        if not callable(unit):
+            raise TypeError("Unit must be Callable.")
+        if value is None:
+            raise TypeError("Value must not be None.")
+
         self.unit = unit
