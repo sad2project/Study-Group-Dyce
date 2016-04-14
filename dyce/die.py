@@ -24,7 +24,13 @@ class Roll:
         self.die = die
         self.face = random.choice(die.faces)
 
+    @property
+    def faceValues(self):
+        return self.face.faceValues
 
+    @property
+    def units(self):
+        return [fv.unit for fv in self.faceValues]
 
 
 class Face:
@@ -52,4 +58,10 @@ class FaceValue:
         if value is None:
             raise TypeError("Value must not be None.")
 
+        self.value = value
         self.unit = unit
+
+    def __eq__(self, other):
+        if other is None: return False
+        return self.value == other.value and self.unit == other.unit
+

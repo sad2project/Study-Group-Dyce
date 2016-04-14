@@ -1,6 +1,7 @@
 from unittest import TestCase
 from dyce.die import *
 
+
 def unit(anum):
     return str(anum)
 
@@ -96,10 +97,43 @@ class FaceValue_Test(TestCase):
         with self.assertRaises(TypeError):
             FaceValue(9001, "")
 
+    def test_equals_similar_face_value(self):
+        fv1 = FaceValue(3, unit)
+        fv2 = FaceValue(3, unit)
+
+        self.assertEqual(fv1, fv2)
+
+    def test_not_equal_dissimilar_face_value(self):
+        fv1 = FaceValue(3, unit)
+        fv2 = FaceValue(5, unit)
+
+        self.assertNotEqual(fv1, fv2)
+
+        fv1 = FaceValue(3, unit)
+        fv2 = FaceValue(3, unit2)
+
+        self.assertNotEqual(fv1, fv2)
+
+        fv1 = FaceValue(3, unit2)
+        fv2 = FaceValue(5, unit)
+
+        self.assertNotEqual(fv1, fv2)
+
 
 class Roll_Test(TestCase):
 
     def test_gets_face_values_of_face(self):
-        pass
-        #Face([])
-        #Roll(., .)
+        faceValue = FaceValue(3, unit)
+        die = Die("Test", [Face([faceValue]), Face([faceValue])])
+
+        roll = Roll(die)
+
+        self.assertEqual(roll.faceValues, [faceValue])
+
+    def test_gets_units_of_face_values(self):
+        faceValue = FaceValue(3, unit)
+        die = Die("Test", [Face([faceValue]), Face([faceValue])])
+
+        roll = Roll(die)
+
+        self.assertEqual(roll.units, [unit])
