@@ -2,7 +2,7 @@ import random
 
 
 class Die:
-    def __init__(self, name, faces):
+    def __init__(self, name, *faces):
         if name is None or len(name.strip()) == 0:
             raise TypeError("Name must not be empty.")
 
@@ -13,7 +13,7 @@ class Die:
             raise TypeError("No faces can be None.")
 
         self.name = name
-        self.faces = faces
+        self.faces = [*faces]
 
     def roll(self):
         return Roll(self)
@@ -34,14 +34,14 @@ class Roll:
 
 
 class Face:
-    def __init__(self, faceValues):
+    def __init__(self, *faceValues):
         if faceValues is None or None in faceValues:
             raise TypeError("Face Values must not be None.")
 
         if _hasDuplicateUnits(faceValues):
             raise TypeError("Face Value Units must be unique.")
 
-        self.faceValues = faceValues
+        self.faceValues = [*faceValues]
 
 
 def _hasDuplicateUnits(faceValues):

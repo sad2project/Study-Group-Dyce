@@ -12,3 +12,11 @@ class BaseRoller:
             if roll is None:
                 raise TypeError("Roll must not be None.")
             self.roll = roll
+
+        @property
+        def final_output(self):
+            return ' | '.join(fv.unit(fv.value) for fv in self.roll.faceValues)
+
+        @property
+        def algorithm_output(self):
+            return self.roll.die.name

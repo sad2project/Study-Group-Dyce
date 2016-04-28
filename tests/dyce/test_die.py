@@ -45,21 +45,21 @@ class Die_Test (TestCase):
             Die(self.someName, self.someFaces)
 
     def test_roll_is_not_None(self):
-        die = Die(self.someName, self.someFaces)
+        die = Die(self.someName, *self.someFaces)
 
         result = die.roll()
 
         self.assertIsNotNone(result)
 
     def test_roll_returns_a_Roll_with_die(self):
-        die = Die(self.someName, self.someFaces)
+        die = Die(self.someName, *self.someFaces)
 
         result = die.roll()
 
         self.assertEqual(result.die, die)
 
     def test_roll_returns_a_Roll_with_Face_from_die(self):
-        die = Die(self.someName, self.someFaces)
+        die = Die(self.someName, *self.someFaces)
 
         result = die.roll()
 
@@ -74,17 +74,17 @@ class Face_Test(TestCase):
 
     def test_no_FaceValues_are_None(self):
         with self.assertRaises(TypeError):
-            Face([None])
+            Face(None)
 
     def test_no_FaceValues_have_the_same_Unit(self):
         fv1 = FaceValue(1, unit)
         fv2 = FaceValue(2, unit)
 
         with self.assertRaises(TypeError):
-            Face([fv1, fv2])
+            Face(fv1, fv2)
 
     def test_can_have_empty_face_values(self):
-        Face([])
+        Face()
 
 
 class FaceValue_Test(TestCase):
@@ -124,7 +124,7 @@ class Roll_Test(TestCase):
 
     def test_gets_face_values_of_face(self):
         faceValue = FaceValue(3, unit)
-        die = Die("Test", [Face([faceValue]), Face([faceValue])])
+        die = Die("Test", Face(faceValue), Face(faceValue))
 
         roll = Roll(die)
 
@@ -132,7 +132,7 @@ class Roll_Test(TestCase):
 
     def test_gets_units_of_face_values(self):
         faceValue = FaceValue(3, unit)
-        die = Die("Test", [Face([faceValue]), Face([faceValue])])
+        die = Die("Test", Face(faceValue), Face(faceValue))
 
         roll = Roll(die)
 
