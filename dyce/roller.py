@@ -5,13 +5,16 @@ class BaseRoller:
         self.die = die
 
     def roll(self):
-        return BaseRoller.BaseResult(self.die.roll())
+        return BaseRoller.BaseResult(self.die.roll(), self)
+
+    @property
+    def algorithm_output(self):
+        return self.die.name
 
     class BaseResult:
-        def __init__(self, roll):
-            if roll is None:
-                raise TypeError("Roll must not be None.")
+        def __init__(self, roll, roller):
             self.roll = roll
+            self.roller = roller
 
         @property
         def final_output(self):
@@ -19,4 +22,8 @@ class BaseRoller:
 
         @property
         def algorithm_output(self):
-            return self.roll.die.name
+            return self.roller.algorithm_output
+
+        @property
+        def intermediate_output(self):
+            return '[' + self.final_output + ']'
