@@ -2,7 +2,14 @@ import random
 
 
 class Die:
+    '''Represents a rollable die.'''
     def __init__(self, name, *faces):
+        '''Constructor
+
+        Arguments:
+        name -- A name for the die
+        faces -- A list of at least two Face objects, none of which can be None
+        '''
         if name is None or len(name.strip()) == 0:
             raise TypeError("Name must not be empty.")
 
@@ -16,25 +23,40 @@ class Die:
         self.faces = [*faces]
 
     def roll(self):
+        '''Returns a Roll object representing the result of a roll of this die'''
         return Roll(self)
 
 
 class Roll:
+    '''Represents the result of rolling a single die.'''
     def __init__(self, die):
+        '''Constructor
+
+        Arguments:
+        die -- A die to roll.
+        '''
         self.die = die
         self.face = random.choice(die.faces)
 
     @property
     def faceValues(self):
+        '''The values showing on the die after being rolled'''
         return self.face.faceValues
 
     @property
     def units(self):
+        '''The units in the face resulting face values'''
         return [fv.unit for fv in self.faceValues]
 
 
 class Face:
+    '''Represents one of the faces of a die. A face may have multiple FaceValues.'''
     def __init__(self, *faceValues):
+        '''Constructor
+
+        Arguments:
+        faceValues -- A variable number of FaceValue objects. Each FaceValue must be unique and not None.
+        '''
         if faceValues is None or None in faceValues:
             raise TypeError("Face Values must not be None.")
 
@@ -52,7 +74,14 @@ def _hasDuplicateUnits(faceValues):
 
 
 class FaceValue:
+    '''Represents a value that shows on a die’s face. A face value has a value and a unit.'''
     def __init__(self, value, unit):
+        '''Constructor
+
+        Arguments:
+        value -- A (typically numeric) value representing the magnitude of the FaceValue
+        unit -- A Callable object that defines what the FaceValue represents
+        '''
         if not callable(unit):
             raise TypeError("Unit must be Callable.")
         if value is None:
