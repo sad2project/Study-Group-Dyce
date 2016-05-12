@@ -58,8 +58,7 @@ class BaseRoller(Roller):
         # TODO: test
         @property
         def units(self):
-            l = [fv.unit for fv in self.roll.faceValues]
-            return set(l)
+            return set(fv.unit for fv in self.roll.faceValues)
 
         # TODO: test
         def unitValue(self, unit):
@@ -107,7 +106,7 @@ class MultiRoller(Roller):
         def units(self):
             units = set()
             for result in self.results:
-                units.union(result.units)
+                units.update(result.units)
             return units
 
         def unitValue(self, unit):

@@ -2,6 +2,7 @@ from dyce.die import *
 from dyce.roller import *
 from collections import namedtuple
 
+
 def numeric(value):
     return str(value)
 
