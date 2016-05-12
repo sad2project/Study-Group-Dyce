@@ -34,7 +34,7 @@ class Result:
 
     @property
     def final_output(self):         #Implemented
-        return ' | '.join(self.unitValue(unit) for unit in self.units)
+        return ' | '.join(unit(self.unitValue(unit)) for unit in self.units)
 
 
 class BaseRoller(Roller):
@@ -58,7 +58,8 @@ class BaseRoller(Roller):
         # TODO: test
         @property
         def units(self):
-            return set(fv.unit for fv in self.roll.faceValues)
+            l = [fv.unit for fv in self.roll.faceValues]
+            return set(l)
 
         # TODO: test
         def unitValue(self, unit):
