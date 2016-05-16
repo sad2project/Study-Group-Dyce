@@ -180,7 +180,8 @@ class SumRoller(Roller):
 
     @property
     def algorithmOutput(self):
-        pass  # TODO
+        return " + ".join('(' + roller.algorithmOutput + ')'
+                          for roller in self.rollers)
 
     class SumResult(Result):
         def __init__(self, results, roller):
