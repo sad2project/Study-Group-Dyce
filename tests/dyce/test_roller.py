@@ -42,12 +42,12 @@ class BaseResult_Test(TestCase):
         self.result = BaseRoller(self.die).roll()
 
     def test_final_output_not_None(self):
-        result = self.result.final_output
+        result = self.result.finalOutput
 
         self.assertIsNotNone(result)
 
     def test_final_output_is_value_from_unit(self):
-        result = self.result.final_output
+        result = self.result.finalOutput
 
         assert_that(result, equal_to(unit1(1)))
 
@@ -59,19 +59,19 @@ class BaseResult_Test(TestCase):
                   Face(facevalue1, facevalue2))
         result = BaseRoller(die).roll()
 
-        test_result = result.final_output
+        test_result = result.finalOutput
 
         assert_that(test_result, any_of(
             equal_to(unit1(1) + ' | ' + unit2(1)),
             equal_to(unit2(1) + ' | ' + unit1(1))))
 
     def test_algorithm_output_is_Die_name(self):
-        result = self.result.algorithm_output
+        result = self.result.algorithmOutput
 
         assert_that(result, equal_to(self.die.name))
 
     def test_intermediate_output_is_not_None(self):
-        result = self.result.intermediate_output
+        result = self.result.intermediateOutput
 
         self.assertIsNotNone(result)
 
@@ -83,7 +83,7 @@ class BaseResult_Test(TestCase):
                   Face(facevalue1, facevalue2))
         result = BaseRoller(die).roll()
 
-        test_result = result.intermediate_output
+        test_result = result.intermediateOutput
 
         assert_that(test_result, any_of(
             equal_to('[' + unit1(1) + ' | ' + unit2(1) + ']'),

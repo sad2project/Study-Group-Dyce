@@ -4,7 +4,7 @@ class Roller:
         raise NotImplementedError()
 
     @property
-    def algorithm_output(self):
+    def algorithmOutput(self):
         raise NotImplementedError()
 
 
@@ -25,15 +25,15 @@ class Result:
         raise NotImplementedError()
 
     @property
-    def algorithm_output(self):     # Implemented
-        return self.roller.algorithm_output
+    def algorithmOutput(self):     # Implemented
+        return self.roller.algorithmOutput
 
     @property
-    def intermediate_output(self):
+    def intermediateOutput(self):
         raise NotImplementedError()
 
     @property
-    def final_output(self):         #Implemented
+    def finalOutput(self):         #Implemented
         return ' | '.join(unit(self.unitValue(unit)) for unit in self.units)
 
 
@@ -47,7 +47,7 @@ class BaseRoller(Roller):
         return BaseRoller.BaseResult(self.die.roll(), self)
 
     @property
-    def algorithm_output(self):
+    def algorithmOutput(self):
         return self.die.name
 
     class BaseResult(Result):
@@ -70,8 +70,8 @@ class BaseRoller(Roller):
             # return self.roll.unitValue(unit)
 
         @property
-        def intermediate_output(self):
-            return '[' + self.final_output + ']'
+        def intermediateOutput(self):
+            return '[' + self.finalOutput + ']'
 
 
 # TODO: test
@@ -92,10 +92,10 @@ class MultiRoller(Roller):
         return MultiRoller.MultiResult(results, self)
 
     @property
-    def algorithm_output(self):
+    def algorithmOutput(self):
         return "{n}{base}".format(
                 n=self.numTimes,
-                base=self.roller.algorithm_output)
+                base=self.roller.algorithmOutput)
 
     class MultiResult(Result):
         def __init__(self, results, roller):
@@ -113,8 +113,8 @@ class MultiRoller(Roller):
             return sum(result.unitValue(unit) for result in self.results)
 
         @property
-        def intermediate_output(self):
-            return "".join(result.intermediate_output for result in self.results)
+        def intermediateOutput(self):
+            return "".join(result.intermediateOutput for result in self.results)
 
 
 # TODO: test
@@ -132,9 +132,9 @@ class ModifierRoller(Roller):
         return ModifierRoller.ModifierResult(self.roller.roll(), self)
 
     @property
-    def algorithm_output(self):
+    def algorithmOutput(self):
         return '{base} + {modifiers}'.format(
-                base=self.roller.algorithm_output,
+                base=self.roller.algorithmOutput,
                 modifiers=self._modifierOutput())
 
     def _modifierOutput(self):
@@ -163,7 +163,40 @@ class ModifierRoller(Roller):
                 return possible[0]
 
         @property
-        def intermediate_output(self):
+        def intermediateOutput(self):
             return "{base} + {modifiers}".format(
-                    base=self.result.intermediate_output,
+                    base=self.result.intermediateOutput,
                     modifiers=self.roller._modifierOutput())
+
+
+# TODO: test
+class SumRoller(Roller):
+    def __init__(self, *rollers):
+        self.rollers = rollers
+
+    def roll(self):
+        return SumRoller.SumResult(
+            [roller.roll() for roller in self.rollers], self)
+
+    @property
+    def algorithmOutput(self):
+        pass  # TODO
+
+    class SumResult(Result):
+        def __init__(self, results, roller):
+            super().__init__(roller)
+            self.results = results
+
+        @property
+        def units(self):
+            units = set()
+            for result in self.results:
+                units.update(result.units)
+            return units
+
+        def unitValue(self, unit):
+            return sum(*(result.unitValue(unit) for result in self.results))
+
+        def intermediateOutput(self):
+            return " + ".join('(' + result.intermediateOutput + ')'
+                              for result in self.results)
