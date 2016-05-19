@@ -92,3 +92,55 @@ class BaseResult_Test(TestCase):
 # algorithm = 2d6 + 3
 # intermediate = [2][5] + 3
 # final = 10
+
+
+class MultiRoller_Test(TestCase):
+    def setUp(self):
+        self.roller = BaseRoller(Die("Test", 0, 0))
+
+    def test_Roller_cannot_be_None(self):
+        with self.assertRaises(TypeError):
+            MultiRoller(3, None)
+
+    def test_numtimes_cannot_be_negative(self):
+        with self.assertRaises(TypeError):
+            MultiRoller(-5, self.roller)
+
+    def test_numtimes_cannot_be_0(self):
+        with self.assertRaises(TypeError):
+            MultiRoller(0, self.roller)
+
+    def test_numtimes_cannot_be_1(self):
+        with self.assertRaises(TypeError):
+            MultiRoller(1, self.roller)
+
+    def test_roll_returns_MultiResult(self):
+        roller = MultiRoller(2, self.roller)
+
+        result = roller.roll()
+
+        assert_that(result, is_(MultiRoller.MultiResult))
+
+    def test_roll_result_contains_correct_num_subresults(self):
+        roller = MultiRoller(2, self.roller)
+
+        result = roller.roll()
+
+        assert_that(result.results, has_length(2))
+
+    def test_algorithmOutput(self):
+        roller = MultiRoller(2, self.roller)
+
+        result = roller.algorithmOutput
+
+        assert_that(result, equal_to("2Test"))
+
+class MultiResult_Test(TestCase):
+    def setUp(self):
+        self.multiResult = MultiRoller(2, BaseRoller(Die("Test", 0, 0))).roll()
+
+    def test_units(self):
+        result = self.multiResult.units
+
+
+

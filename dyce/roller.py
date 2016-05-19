@@ -196,8 +196,9 @@ class SumRoller(Roller):
             return units
 
         def unitValue(self, unit):
-            return sum(*(result.unitValue(unit) for result in self.results))
+            return sum((result.unitValue(unit) for result in self.results))
 
+        @property
         def intermediateOutput(self):
             return " + ".join('(' + result.intermediateOutput + ')'
                               for result in self.results)
