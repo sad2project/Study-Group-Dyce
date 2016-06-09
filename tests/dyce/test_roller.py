@@ -2,6 +2,8 @@ from unittest import TestCase
 from hamcrest.core.assert_that import assert_that
 from hamcrest.core.core import *
 from hamcrest.library.object import *
+from hamcrest.library.collection import *
+from hamcrest.library.object import has_length
 from dyce.roller import *
 from dyce.die import *
 
@@ -89,6 +91,7 @@ class BaseResult_Test(TestCase):
             equal_to('[' + unit1(1) + ' | ' + unit2(1) + ']'),
             equal_to('[' + unit2(1) + ' | ' + unit1(1) + ']')))
 
+# Example Outputs:
 # algorithm = 2d6 + 3
 # intermediate = [2][5] + 3
 # final = 10
@@ -135,12 +138,44 @@ class MultiRoller_Test(TestCase):
 
         assert_that(result, equal_to("2Test"))
 
+
 class MultiResult_Test(TestCase):
     def setUp(self):
-        self.multiResult = MultiRoller(2, BaseRoller(Die("Test", 0, 0))).roll()
+        self.numTimes = 5
+        self.unit1Value = 4
+        self.unit2Value = 2
+        die = Die("Test",
+                  Face(FaceValue(self.unit1Value, unit1),
+                       FaceValue(self.unit2Value, unit2)),
+                  Face(FaceValue(self.unit1Value, unit1),
+                       FaceValue(self.unit2Value, unit2)))
+
+        roller = MultiRoller(self.numTimes, BaseRoller(die))
+        self.multiResult = roller.roll()
 
     def test_units(self):
         result = self.multiResult.units
 
+        assert_that(result, all_of(has_length(2),
+                                   contains_inanyorder(unit1, unit2)))
 
+    def test_unitValue(self):
+        for unit in self.multiResult.units:
+            result = self.multiResult.unitValue(unit)
 
+            if unit is unit1:
+                assert_that(result, equal_to(self.unit1Value * self.numTimes))
+            elif unit is unit2:
+                assert_that(result, equal_to(self.unit2Value * self.numTimes))
+
+    def test_intermediateOutput(self):
+        result = self.multiResult.intermediateOutput
+
+        assert_that(result, equal_to(('[1: ' + str(self.unit1Value) + ' | ' +
+                                      '2: ' + str(self.unit2Value) + ']') * self.numTimes))
+
+    def test_finalOutput(self):
+        result = self.multiResult.finalOutput
+
+        assert_that(result, is_not(equal_to('1: ' + str(self.unit1Value * self.numTimes) + ' | ' +
+                                     '2: ' + str(self.unit2Value * self.numTimes))))

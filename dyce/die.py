@@ -1,4 +1,5 @@
 import random
+from dyce.roller import BaseRoller
 
 
 class Die:
@@ -21,6 +22,10 @@ class Die:
 
         self.name = name
         self.faces = [*faces]
+
+    @property
+    def roller(self):
+        return BaseRoller(self)
 
     def roll(self):
         '''Returns a Roll object representing the result of a roll of this die'''
